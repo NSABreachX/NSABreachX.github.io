@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSABreachX - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto Mono', monospace;
+      background: linear-gradient(135deg, #0f2027 60%, #232b36 100%);
+      color: #f5f5f5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    /* Effet grille militaire/espionnage */
+    body:before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      z-index: 0;
+      background-image: linear-gradient(90deg, #00ffe7 1px, transparent 1px), linear-gradient(180deg, #00ffe7 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      background: rgba(10,20,40,0.92);
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+      border-bottom: 3px solid #00ffe7;
+      border-top: 6px solid #232b36;
+      position: relative;
+      z-index: 1;
+    }
+    header:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 6px;
+      background: repeating-linear-gradient(90deg, #00ffe7 0 20px, #232b36 20px 40px);
+      opacity: 0.25;
+      z-index: 2;
+    }
+    .glow {
+      color: #00ffe7;
+      text-shadow: 0 0 8px #00ffe7, 0 0 24px #00ffe7;
+      font-family: 'Orbitron', monospace;
+      font-size: 3rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.5em;
+      margin-top: 1em;
+      animation: flicker 2.5s infinite alternate;
+      letter-spacing: 0.12em;
+      border-bottom: 2px dashed #00ffe7;
+      padding-bottom: 0.2em;
+    }
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.85; text-shadow: 0 0 16px #00ffe7, 0 0 32px #00ffe7; }
+      100% { opacity: 1; }
+    }
+    .subtitle {
+      font-size: 1.3rem;
+      color: #b2fefa;
+      margin-bottom: 2em;
+      text-align: center;
+      max-width: 600px;
+      font-style: italic;
+      border-left: 4px solid #00ffe7;
+      border-right: 4px solid #00ffe7;
+      background: rgba(20,30,50,0.18);
+      padding: 0.7em 1em;
+      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+    }
+    nav {
+      display: flex;
+      gap: 2em;
+      margin-bottom: 2em;
+      background: rgba(10,20,40,0.7);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+      padding: 0.5em 1em;
+      border: 1.5px solid #00ffe7;
+    }
+    nav a {
+      color: #00ffe7;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: color 0.2s;
+      letter-spacing: 0.04em;
+      position: relative;
+    }
+    nav a:hover {
+      color: #fff;
+      text-shadow: 0 0 8px #00ffe7;
+      text-decoration: underline wavy #00ffe7 2px;
+    }
+    section {
+      max-width: 1100px;
+      margin: 3em auto;
+      background: rgba(20,30,50,0.95);
+      border-radius: 18px;
+      box-shadow: 0 4px 32px 0 rgba(0,255,231,0.08);
+      padding: 2.5em 2em;
+      border-left: 4px solid #00ffe7;
+      border-right: 4px solid #00ffe7;
+      animation: fadeIn 1.2s;
+      position: relative;
+      z-index: 1;
+      border-top: 2px solid #232b36;
+      border-bottom: 2px solid #232b36;
+    }
+    section:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      height: 6px;
+      background: repeating-linear-gradient(90deg, #00ffe7 0 20px, #232b36 20px 40px);
+      opacity: 0.13;
+      border-radius: 18px 18px 0 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      color: #00ffe7;
+      font-family: 'Orbitron', monospace;
+      font-size: 2.2em;
+      margin-bottom: 0.7em;
+      letter-spacing: 1px;
+      border-left: 6px solid #00ffe7;
+      padding-left: 0.5em;
+      text-shadow: 0 0 8px #00ffe7;
+    }
+    .skills-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2em;
+      justify-content: space-between;
+    }
+    .skill-block {
+      flex: 1 1 320px;
+      min-width: 280px;
+      background: rgba(20,30,50,0.15);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+      padding: 1.5em 1.2em;
+      border: 1px solid #00ffe7;
+    }
+    .skill-block h3 {
+      color: #00ffe7;
+      font-size: 1.5em;
+      margin-bottom: 1em;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .skill-block h3 span {
+      font-size: 1.8em;
+    }
+    .skills-list, .soft-list, .exp-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2em;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2em 0;
+      font-size: 1.07em;
+    }
+    .skills-list li, .soft-list li, .exp-list li {
+      background: rgba(0,255,231,0.08);
+      border: 1px solid #00ffe7;
+      border-radius: 8px;
+      padding: 0.7em 1.2em;
+      font-size: 1.05em;
+      color: #b2fefa;
+      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+      transition: background 0.2s, color 0.2s;
+      font-family: 'Roboto Mono', monospace;
+      letter-spacing: 0.01em;
+      border-left: 4px solid #232b36;
+      border-right: 4px solid #232b36;
+    }
+    .skills-list li:hover, .soft-list li:hover, .exp-list li:hover {
+      background: #00ffe7;
+      color: #0f2027;
+      border-color: #00ffe7;
+      font-weight: bold;
+    }
+    .timeline {
+      border-left: 3px solid #00ffe7;
+      margin-left: 1.5em;
+      padding-left: 2em;
+      position: relative;
+      background: rgba(10,20,40,0.12);
+      border-radius: 8px;
+    }
+    .timeline-event {
+      margin-bottom: 2em;
+      position: relative;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .timeline-event:before {
+      content: '';
+      position: absolute;
+      left: -2.1em;
+      top: 0.3em;
+      width: 1.2em;
+      height: 1.2em;
+      background: #00ffe7;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ffe7;
+      border: 2px solid #232b36;
+    }
+    .timeline-title {
+      font-weight: bold;
+      color: #00ffe7;
+      font-size: 1.1em;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 6px #00ffe7;
+    }
+    .timeline-desc {
+      color: #b2fefa;
+      margin-top: 0.2em;
+      font-size: 1em;
+      font-style: italic;
+    }
+    .contact {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2em;
+      background: rgba(10,20,40,0.13);
+      border-radius: 8px;
+      border: 1.5px solid #00ffe7;
+      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+      padding: 1.2em 0.5em;
+    }
+    .contact input, .contact textarea {
+      background: #1a2a3a;
+      border: 1px solid #00ffe7;
+      border-radius: 6px;
+      color: #fff;
+      padding: 0.7em 1em;
+      font-size: 1em;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 1em;
+      transition: border 0.2s;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .contact input:focus, .contact textarea:focus {
+      border: 1.5px solid #00ffe7;
+      outline: none;
+    }
+    .contact button {
+      background: #00ffe7;
+      color: #0f2027;
+      border: none;
+      border-radius: 6px;
+      padding: 0.8em 2em;
+      font-size: 1.1em;
+      font-family: 'Orbitron', monospace;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.12);
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.04em;
+      border: 2px solid #232b36;
+    }
+    .contact button:hover {
+      background: #fff;
+      color: #00ffe7;
+      border-color: #00ffe7;
+    }
+    @media (max-width: 900px) {
+      section, #competences {
+        width: 100% !important;
+        overflow-x: visible !important;
+      }
+      .glow { font-size: 2.2em; }
+      h2 { font-size: 1.5em; }
+      .subtitle { font-size: 1.1em; max-width: 98vw; }
+      .skills-list, .soft-list, .exp-list { gap: 0.8em; }
+      .timeline { padding-left: 1.2em; margin-left: 0.7em; }
+      .timeline-event:before { left: -1.3em; width: 1em; height: 1em; }
+      .contact input, .contact textarea { max-width: 98vw; font-size: 1em; }
+      .contact button { width: 100%; font-size: 1.05em; }
+      #formMessage { font-size: 1.05em; }
+      svg[width="90"] { width: 70px !important; height: 70px !important; }
+      .skills-categories, .skill-block {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .skill-block {
+        margin-bottom: 1em !important;
+        padding: 1em 0.4em !important;
+      }
+    }
+    @media (max-width: 700px) {
+      section, #competences {
+        width: 100% !important;
+        overflow-x: visible !important;
+      }
+      header { min-height: 30vh; padding: 1em 0.2em; }
+      nav { flex-direction: column; gap: 0.7em; margin-bottom: 1em; }
+      nav a { font-size: 1em; }
+      .glow { font-size: 1.5em; }
+      h2 { font-size: 1.1em; }
+      .subtitle { font-size: 0.98em; max-width: 98vw; }
+      section { padding: 1em 0.2em; }
+      .skills-list, .soft-list, .exp-list { flex-direction: column; gap: 0.7em; }
+      .timeline { padding-left: 0.7em; margin-left: 0.2em; }
+      .timeline-event:before { left: -1em; width: 0.7em; height: 0.7em; }
+      .contact input, .contact textarea { max-width: 98vw; font-size: 0.98em; }
+      .contact button { width: 100%; font-size: 1em; }
+      #formMessage { font-size: 1em; }
+      svg[width="90"] { width: 48px !important; height: 48px !important; }
+      .skills-categories, .skill-block {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .skill-block {
+        margin-bottom: 1em !important;
+        padding: 1em 0.4em !important;
+      }
+    }
+    @media (max-width: 400px) {
+      section, #competences {
+        width: 100% !important;
+        overflow-x: visible !important;
+      }
+      .glow { font-size: 1em; }
+      h2 { font-size: 0.9em; }
+      .subtitle { font-size: 0.85em; }
+      .contact input, .contact textarea { font-size: 0.8em; }
+      .contact button { font-size: 0.85em; }
+      svg[width="90"] { width: 32px !important; height: 32px !important; }
+      .skills-categories, .skill-block {
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .skill-block {
+        margin-bottom: 1em !important;
+        padding: 0.7em 0.2em !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="margin-top:2em;">
+      <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:auto;">
+        <defs>
+          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#00ffe7" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#0f2027" stop-opacity="0.1"/>
+          </radialGradient>
+        </defs>
+        <circle cx="45" cy="45" r="40" fill="url(#glow)"/>
+        <path d="M30 60 L45 20 L60 60 Z" fill="#00ffe7" stroke="#fff" stroke-width="2"/>
+        <text x="45" y="70" text-anchor="middle" font-family="'Orbitron', monospace" font-size="18" fill="#fff" style="letter-spacing:2px;">MOB</text>
+      </svg>
+    </div>
+    <div class="glow">NSABreachX</div>
+    <div class="subtitle">Portfolio d'excellence en cybersécurité offensive, reverse engineering et innovation. Découvrez un parcours unique, des compétences de pointe et des réalisations reconnues internationalement.</div>
+    <nav>
+      <a href="#about">À propos</a>
+      <a href="#competences">Compétences</a>
+      <a href="#realisations">Réalisations</a>
+      <a href="#experience">Expérience</a>
+      <a href="#contact">Contact</a>
+      <a href="https://tryhackme.com/p/NSABreachX" target="_blank" rel="noopener" style="color:#fff; text-shadow:0 0 8px #00ffe7;">TryHackMe</a>
+    </nav>
+  </header>
+
+  <section id="about">
+    <h2>À propos</h2>
+    <div style="font-size:1.15em;line-height:1.7;color:#b2fefa;max-width:700px;margin:auto;text-align:center;">
+      <span style="font-weight:bold;color:#00ffe7;">Expert en cybersécurité offensive, reverse engineering et innovation.</span><br>
+      Passionné par la recherche de vulnérabilités, la création d’outils avancés et l’automatisation de la sécurité, j’ai mené des projets d’envergure, publié des CVEs, et contribué à la communauté internationale.<br>
+      Mon approche : repousser les limites de la sécurité, innover, et transmettre mon savoir.
+    </div>
+  </section>
+
+  <section id="competences">
+    <h2>Compétences techniques</h2>
+    <div class="skills-categories">
+      <div class="skill-block">
+        <h3><span style="font-size:1.2em;">🛡️</span> Hacking offensif</h3>
+        <ul class="skills-list">
+          <li><b>Recherche & exploitation 0day</b> — Découverte et exploitation de failles inédites sur systèmes, applications, réseaux et protocoles.</li>
+          <li><b>Reverse engineering avancé</b> — Analyse de binaires, firmware, drivers, OS, pour comprendre et détourner la logique interne.</li>
+          <li><b>Exploitation mémoire & kernel</b> — Maîtrise des techniques d’exploitation bas niveau (buffer overflow, kernel panic, rootkit, bootkit...)</li>
+          <li><b>Hacking RF & GSM</b> — Interception, analyse et détournement de signaux (SIGINT, HUMINT, TECHINT).</li>
+          <li><b>Automatisation offensive</b> — Développement d’outils sur-mesure pour industrialiser l’exploitation de vulnérabilités.</li>
+          <li><b>Cryptographie avancée</b> — Attaques et détournements de protocoles de chiffrement modernes.</li>
+          <li>Prise de contrôle d’infrastructures (web, systèmes, réseaux, mobiles, hardware)</li>
+          <li>Création et modification de firmware, patchs, sabotage, propagation</li>
+          <li>OSINT avancé, exfiltration massive, récupération de documents confidentiels</li>
+          <li>Manipulation d’outils spécialisés (Shodan, Censys, Fofa, IntelX)</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3><span style="font-size:1.2em;">🔒</span> Hacking défensif & sécurité</h3>
+        <ul class="skills-list">
+          <li><b>OPSEC, anonymisation</b> — Sécurité opérationnelle et protection de l’identité numérique.</li>
+          <li><b>Conception de VPN, réseaux décentralisés</b> — Création de tunnels chiffrés et d’architectures sécurisées.</li>
+          <li><b>Création d’algorithmes de chiffrement</b> — Développement de solutions de sécurité sur-mesure.</li>
+          <li><b>Détection et mitigation de vulnérabilités</b> — Patchs, correctifs, hardening, audit de code source.</li>
+          <li><b>Transformation offensive → défensive</b> — Utilisation de techniques d’attaque pour renforcer la défense.</li>
+          <li>Mise en place de sécurité de haut niveau (I2P, Zeronet, réseaux privés)</li>
+          <li>Audit, pentest, analyse de code source, prédiction de comportements systèmes</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3><span style="font-size:1.2em;">💻</span> Programmation & développement</h3>
+        <ul class="skills-list">
+          <li><b>Langages</b> : C (exploits, rootkits), Python (outils, scripts, exploits), SQL, Bash, Batch</li>
+          <li><b>Polyvalence</b> : capacité à coder dans tout langage avec documentation</li>
+          <li>Création d’interpréteurs, automates, outils d’analyse et d’exploitation</li>
+          <li>Développement d’outils d’espionnage, d’interception, de décodage</li>
+          <li>Conception de requêtes SQL haut niveau, automatisation de tâches complexes</li>
+          <li>Reverse engineering logiciel, patch, modification de binaires</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3><span style="font-size:1.2em;">🚀</span> Innovation & recherche</h3>
+        <ul class="skills-list">
+          <li>Création d’outils et d’algorithmes inédits en cybersécurité</li>
+          <li>Développement de méthodologies d’exploitation et de défense</li>
+          <li>Rédaction de théories sur la sécurité, la cryptographie, la physique appliquée</li>
+          <li>Veille technologique, adaptation rapide aux nouvelles menaces</li>
+          <li>Expérience en création d’IA, LLM, automation de la cybersécurité</li>
+        </ul>
+      </div>
+    </div>
+    <h2>Soft skills</h2>
+    <ul class="soft-list">
+      <li>Management d’équipe, leadership, création de communauté</li>
+      <li>HUMINT (social engineering, manipulation humaine)</li>
+      <li>Stratégie, résolution de problèmes, innovation</li>
+      <li>Analyse logique, prédiction de systèmes</li>
+      <li>Communication, adaptation, rapidité d’apprentissage</li>
+      <li>Traitement rapide de l’information, prise de décision</li>
+      <li>Utilisation avancée de l’OSINT, TECHINT, HUMINT, SIGINT</li>
+    </ul>
+  </section>
+
+  <section id="realisations">
+    <h2>Réalisations</h2>
+    <ul class="exp-list">
+      <li><span style="background:#00ffe7;color:#0f2027;padding:0.2em 0.7em;border-radius:6px;font-weight:bold;">0day</span> Découverte de vulnérabilités 0day sur GSM, Messenger, Windows, Linux, Firefox</li>
+      <li>Création d’outils d’automatisation d’exploitation de failles 0day</li>
+      <li>Reverse engineering de modules GSM, OS, kernel, drivers</li>
+      <li>Création de rootkits, bootkits, spyware, worm avancés</li>
+      <li><span style="background:#00ffe7;color:#0f2027;padding:0.2em 0.7em;border-radius:6px;font-weight:bold;">TryHackMe</span> Certifications (<a href="https://tryhackme.com/p/NSABreachX" target="_blank" rel="noopener" style="color:#00ffe7;">voir profil</a>)</li>
+      <li>Récupération de fichiers confidentiels dans le cadre de tests d’intrusion</li>
+      <li>Création d’algorithmes de chiffrement et de sécurité</li>
+      <li>Prise de contrôle de systèmes et infrastructures lors de pentests</li>
+      <li>Vente de vulnérabilités 0day à des sociétés spécialisées comme Zerodium</li>
+      <li><span style="background:#00ffe7;color:#0f2027;padding:0.2em 0.7em;border-radius:6px;font-weight:bold;">CVE</span> Publication de 2 CVEs officielles</li>
+      <li>Création d’une communauté regroupant 1000 membres</li>
+      <li>Développement de logiciels professionnels en quantité massive</li>
+    </ul>
+  </section>
+
+  <section id="experience">
+    <h2>Expérience & exploits</h2>
+    <div class="timeline">
+      <div class="timeline-event">
+        <div class="timeline-title">Reverse engineering & exploitation kernel Linux</div>
+        <div class="timeline-desc">Exploitation de pointeurs, vulnérabilités Write What Where, kernel panic, élévation de privilèges, patchs, etc.</div>
+      </div>
+      <div class="timeline-event">
+        <div class="timeline-title">Automatisation de l’exploitation 0day</div>
+        <div class="timeline-desc">Développement d’outils pour exploiter et extraire des données de failles 0day à l’échelle professionnelle.</div>
+      </div>
+      <div class="timeline-event">
+        <div class="timeline-title">Prise de contrôle d’infrastructures</div>
+        <div class="timeline-desc">Contrôle de systèmes, exploitation de vulnérabilités logiques, détournement de communications lors de missions de sécurité.</div>
+      </div>
+      <div class="timeline-event">
+        <div class="timeline-title">Innovation & recherche</div>
+        <div class="timeline-desc">Création d’outils, algorithmes, et méthodologies appliquées à la cybersécurité.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <form id="contactForm" class="contact" autocomplete="off">
+      <input type="text" name="name" placeholder="Votre nom" required>
+      <input type="email" name="email" placeholder="Votre email" required>
+      <textarea name="message" rows="5" placeholder="Votre message" required></textarea>
+      <button type="submit">Envoyer</button>
+    </form>
+    <div id="formMessage" style="display:none;margin-top:1em;font-weight:bold;color:#00ffe7;text-align:center;"></div>
+  </section>
+
+  <footer style="text-align:center; color:#00ffe7; margin:2em 0 1em 0; font-family:'Orbitron', monospace; letter-spacing:0.08em; border-top:2px solid #00ffe7; background:rgba(10,20,40,0.7); padding:1em 0;">
+    <span style="font-size:1.1em;">&copy; 2025 NSABreachX</span> <br>
+    <span style="font-size:0.95em;opacity:0.7;">Design Fais par NSABreachX.</span>
+  </footer>
+
+  <script>
+    // Animation d’apparition des sections au scroll
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.2 });
+    sections.forEach(section => {
+      section.style.opacity = 0;
+      section.style.transform = 'translateY(40px)';
+      observer.observe(section);
+    });
+    // Fallback : forcer l'affichage de toutes les sections après 1 seconde (corrige le bug mobile)
+    setTimeout(() => {
+      document.querySelectorAll('section').forEach(section => {
+        section.style.opacity = 1;
+        section.style.transform = 'translateY(0)';
+      });
+    }, 1000);
+
+    // Formulaire contact avec vérification d'envoi
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const formMessage = document.getElementById('formMessage');
+      try {
+        const response = await fetch('https://formspree.io/f/xgvyjlwe', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        });
+        if (response.ok) {
+          formMessage.textContent = 'Merci, votre message a bien été envoyé !';
+          formMessage.style.display = 'block';
+          form.reset();
+        } else {
+          formMessage.textContent = "Erreur lors de l'envoi. Veuillez réessayer.";
+          formMessage.style.display = 'block';
+        }
+      } catch (err) {
+        formMessage.textContent = "Erreur réseau. Veuillez réessayer.";
+        formMessage.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html> 
