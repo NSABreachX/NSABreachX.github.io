@@ -4,170 +4,312 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NSABreachX - Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Portfolio professionnel de NSABreachX, consultant freelance en cybersécurité offensive, reverse engineering et innovation. Réalisations, compétences, contact, CV téléchargeable.">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
-    body {
+    :root {
+      --military-green: #223322;
+      --military-green-dark: #1a241a;
+      --military-green-light: #2e4637;
+      --military-grey: #232b2b;
+      --military-black: #101513;
+      --military-accent: #ff9900;
+      --military-accent-dark: #b36b00;
+      --military-border: #4b6043;
+      --military-text: #e0ffe0;
+      --military-soft: #b2c2b2;
+      --military-alert: #ff3c00;
+      --radius: 12px;
+      --shadow: 0 4px 24px 0 rgba(34,51,34,0.18);
+      --transition: 0.22s cubic-bezier(.4,2,.6,1);
+      --max-width: 1100px;
+    }
+    html, body {
       margin: 0;
-      font-family: 'Roboto Mono', monospace;
-      background: linear-gradient(135deg, #0f2027 60%, #232b36 100%);
-      color: #f5f5f5;
+      padding: 0;
+      font-family: 'Share Tech Mono', 'Roboto Mono', monospace;
+      background: linear-gradient(135deg, var(--military-black) 60%, var(--military-green-dark) 100%);
+      color: var(--military-text);
       min-height: 100vh;
       overflow-x: hidden;
-      position: relative;
+      width: 100vw;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
     }
-    /* Effet grille militaire/espionnage */
     body:before {
       content: '';
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
-      opacity: 0.08;
+      opacity: 0.10;
       z-index: 0;
-      background-image: linear-gradient(90deg, #00ffe7 1px, transparent 1px), linear-gradient(180deg, #00ffe7 1px, transparent 1px);
-      background-size: 40px 40px;
+      background: repeating-linear-gradient(120deg, var(--military-border) 0 2px, transparent 2px 80px), repeating-linear-gradient(90deg, var(--military-green-light) 0 1px, transparent 1px 80px);
+      background-size: 80px 80px;
+      animation: bgmove 24s linear infinite;
     }
-    header {
+    @keyframes bgmove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 80px 80px, 80px 80px; }
+    }
+    .bg-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 300;
+      background: var(--military-green-dark);
+      border: 1.5px solid var(--military-accent);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.10);
+      transition: background var(--transition), border var(--transition);
+    }
+    .bg-toggle svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--military-accent);
+    }
+    /* Fond animé particules */
+    #particles-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+    /* Navigation sticky glass */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      gap: 2vw;
+      background: var(--military-green-dark);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: var(--shadow);
+      border-bottom: 3px solid var(--military-border);
+      margin: 0 auto 2vw auto;
+      padding: 1em 2vw 0.7em 2vw;
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
+      overflow-x: auto;
+    }
+    nav a {
+      color: var(--military-accent);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.08em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      position: relative;
+      padding: 0.2em 0.9em;
+      border-radius: 6px;
+      border: 2px solid var(--military-border);
+      background: var(--military-grey);
+      transition: color var(--transition), background var(--transition), box-shadow var(--transition), border var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.10);
+    }
+    nav a.active, nav a:hover {
+      color: #fff;
+      background: var(--military-accent);
+      border-color: var(--military-accent-dark);
+      box-shadow: 0 0 12px var(--military-accent);
+      text-shadow: 0 0 4px var(--military-accent);
+    }
+    /* Hero Section */
+    .hero {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 60vh;
-      background: rgba(10,20,40,0.92);
-      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
-      border-bottom: 3px solid #00ffe7;
-      border-top: 6px solid #232b36;
+      min-height: 50vh;
+      background: none;
       position: relative;
       z-index: 1;
+      margin-bottom: 2em;
+      width: 100vw;
+      max-width: 100vw;
+      box-sizing: border-box;
+      padding: 0 2vw;
+      overflow: hidden;
     }
-    header:after {
-      content: '';
+    .hero-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--military-accent) 60%, var(--military-green-dark) 100%);
+      box-shadow: 0 0 0 3px var(--military-accent), 0 0 12px var(--military-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2em;
+      overflow: hidden;
+      position: relative;
+      animation: avatarGlow 2.5s infinite alternate;
+    }
+    @keyframes avatarGlow {
+      0% { box-shadow: 0 0 0 3px var(--military-accent), 0 0 12px var(--military-accent); }
+      100% { box-shadow: 0 0 0 6px var(--military-accent), 0 0 24px var(--military-accent); }
+    }
+    .hero-avatar svg {
+      width: 70px;
+      height: 70px;
       display: block;
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: 6px;
-      background: repeating-linear-gradient(90deg, #00ffe7 0 20px, #232b36 20px 40px);
-      opacity: 0.25;
-      z-index: 2;
     }
-    .glow {
-      color: #00ffe7;
-      text-shadow: 0 0 8px #00ffe7, 0 0 24px #00ffe7;
-      font-family: 'Orbitron', monospace;
-      font-size: 3rem;
-      letter-spacing: 2px;
-      margin-bottom: 0.5em;
-      margin-top: 1em;
-      animation: flicker 2.5s infinite alternate;
-      letter-spacing: 0.12em;
-      border-bottom: 2px dashed #00ffe7;
-      padding-bottom: 0.2em;
+    .hero-title {
+      color: var(--military-accent);
+      text-shadow: 0 0 6px var(--military-accent-dark);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 0.13em;
+      margin-bottom: 0.2em;
+      border-bottom: 2px dashed var(--military-accent);
+      padding-bottom: 0.1em;
+      text-align: center;
+      width: 100%;
+      max-width: 98vw;
+      box-sizing: border-box;
+      text-transform: uppercase;
     }
     @keyframes flicker {
       0% { opacity: 1; }
-      50% { opacity: 0.85; text-shadow: 0 0 16px #00ffe7, 0 0 32px #00ffe7; }
+      50% { opacity: 0.92; text-shadow: 0 0 12px var(--military-accent); }
       100% { opacity: 1; }
     }
-    .subtitle {
-      font-size: 1.3rem;
-      color: #b2fefa;
-      margin-bottom: 2em;
+    .hero-subtitle {
+      font-size: clamp(1em, 2vw, 1.1rem);
+      color: var(--military-soft);
+      margin-bottom: 1.2em;
       text-align: center;
-      max-width: 600px;
+      max-width: 98vw;
       font-style: italic;
-      border-left: 4px solid #00ffe7;
-      border-right: 4px solid #00ffe7;
-      background: rgba(20,30,50,0.18);
-      padding: 0.7em 1em;
-      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
-    }
-    nav {
-      display: flex;
-      gap: 2em;
-      margin-bottom: 2em;
-      background: rgba(10,20,40,0.7);
-      border-radius: 8px;
-      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+      border-left: 4px solid var(--military-accent);
+      border-right: 4px solid var(--military-accent);
+      background: rgba(34,51,34,0.13);
       padding: 0.5em 1em;
-      border: 1.5px solid #00ffe7;
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.04);
+      border-radius: 10px;
+      box-sizing: border-box;
     }
-    nav a {
-      color: #00ffe7;
-      text-decoration: none;
+    .hero-cta {
+      margin-top: 1em;
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      max-width: 98vw;
+      box-sizing: border-box;
+    }
+    .hero-cta a {
+      background: var(--military-accent);
+      color: var(--military-black);
+      font-family: 'Share Tech Mono', monospace;
       font-weight: bold;
-      font-size: 1.1em;
-      transition: color 0.2s;
+      border-radius: 8px;
+      padding: 0.7em 1.5em;
+      font-size: 1em;
+      text-decoration: none;
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.10);
+      border: 2px solid var(--military-border);
+      transition: background var(--transition), color var(--transition), box-shadow var(--transition), border var(--transition);
       letter-spacing: 0.04em;
-      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      white-space: nowrap;
+      text-transform: uppercase;
     }
-    nav a:hover {
+    .hero-cta a:hover {
+      background: var(--military-alert);
       color: #fff;
-      text-shadow: 0 0 8px #00ffe7;
-      text-decoration: underline wavy #00ffe7 2px;
+      box-shadow: 0 0 12px var(--military-alert);
+      border-color: var(--military-alert);
     }
+    .cv-link {
+      color: var(--military-accent);
+      font-weight: bold;
+      text-decoration: underline;
+      margin-left: 0.5em;
+      font-size: 1em;
+    }
+    .cv-link:hover { color: var(--military-accent); }
+    /* Section glassmorphism */
     section {
-      max-width: 1100px;
-      margin: 3em auto;
-      background: rgba(20,30,50,0.95);
-      border-radius: 18px;
-      box-shadow: 0 4px 32px 0 rgba(0,255,231,0.08);
-      padding: 2.5em 2em;
-      border-left: 4px solid #00ffe7;
-      border-right: 4px solid #00ffe7;
-      animation: fadeIn 1.2s;
+      max-width: var(--max-width);
+      width: 100%;
+      margin: 2.5em auto;
+      background: rgba(34,51,34,0.85);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(1em, 4vw, 2.2em) clamp(0.5em, 4vw, 1.5em);
+      border: 2.5px solid var(--military-border);
+      box-sizing: border-box;
+      overflow-x: auto;
       position: relative;
-      z-index: 1;
-      border-top: 2px solid #232b36;
-      border-bottom: 2px solid #232b36;
-    }
-    section:before {
-      content: '';
-      display: block;
-      position: absolute;
-      left: 0; right: 0; top: 0;
-      height: 6px;
-      background: repeating-linear-gradient(90deg, #00ffe7 0 20px, #232b36 20px 40px);
-      opacity: 0.13;
-      border-radius: 18px 18px 0 0;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    h2 {
-      color: #00ffe7;
-      font-family: 'Orbitron', monospace;
-      font-size: 2.2em;
-      margin-bottom: 0.7em;
-      letter-spacing: 1px;
-      border-left: 6px solid #00ffe7;
+    h2, h3 {
+      color: var(--military-accent);
+      font-family: 'Share Tech Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      border-left: 6px solid var(--military-accent);
       padding-left: 0.5em;
-      text-shadow: 0 0 8px #00ffe7;
+      text-shadow: 0 0 4px var(--military-accent-dark);
+      margin-bottom: 0.7em;
+      max-width: 98vw;
+      box-sizing: border-box;
     }
+    /* Cards compétences */
     .skills-categories {
       display: flex;
       flex-wrap: wrap;
-      gap: 2em;
+      gap: 2vw;
       justify-content: space-between;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .skill-block {
-      flex: 1 1 320px;
-      min-width: 280px;
-      background: rgba(20,30,50,0.15);
-      border-radius: 12px;
-      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+    .skill-block, .proof-card {
+      background: rgba(16,21,19,0.92);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.13);
+      border: 2px solid var(--military-border);
       padding: 1.5em 1.2em;
-      border: 1px solid #00ffe7;
+      margin-bottom: 1.2em;
+      transition: box-shadow var(--transition), transform var(--transition), border var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
     }
-    .skill-block h3 {
-      color: #00ffe7;
+    .skill-block:hover, .proof-card:hover {
+      box-shadow: 0 0 24px var(--military-accent);
+      border-color: var(--military-accent);
+      transform: translateY(-6px) scale(1.03);
+    }
+    .skill-block h3, .proof-card h3 {
+      color: var(--military-accent);
       font-size: 1.5em;
       margin-bottom: 1em;
       display: flex;
       align-items: center;
       gap: 0.5em;
+      max-width: 98vw;
+      box-sizing: border-box;
     }
-    .skill-block h3 span {
+    .skill-block h3 span, .proof-card h3 span {
       font-size: 1.8em;
     }
     .skills-list, .soft-list, .exp-list {
@@ -178,39 +320,52 @@
       padding: 0;
       margin: 0 0 2em 0;
       font-size: 1.07em;
+      width: 100%;
+      box-sizing: border-box;
     }
     .skills-list li, .soft-list li, .exp-list li {
-      background: rgba(0,255,231,0.08);
-      border: 1px solid #00ffe7;
+      background: rgba(34,51,34,0.18);
+      border: 1.5px solid var(--military-border);
       border-radius: 8px;
       padding: 0.7em 1.2em;
       font-size: 1.05em;
-      color: #b2fefa;
-      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
-      transition: background 0.2s, color 0.2s;
-      font-family: 'Roboto Mono', monospace;
+      color: var(--military-soft);
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.08);
+      transition: background var(--transition), color var(--transition), box-shadow var(--transition), border var(--transition);
+      font-family: 'Share Tech Mono', monospace;
       letter-spacing: 0.01em;
-      border-left: 4px solid #232b36;
-      border-right: 4px solid #232b36;
+      border-left: 4px solid var(--military-accent-dark);
+      border-right: 4px solid var(--military-accent-dark);
+      max-width: 100vw;
+      box-sizing: border-box;
+      word-break: break-word;
     }
     .skills-list li:hover, .soft-list li:hover, .exp-list li:hover {
-      background: #00ffe7;
-      color: #0f2027;
-      border-color: #00ffe7;
+      background: var(--military-accent);
+      color: var(--military-black);
+      border-color: var(--military-accent);
       font-weight: bold;
+      box-shadow: 0 0 12px var(--military-accent);
     }
+    /* Timeline animée */
     .timeline {
-      border-left: 3px solid #00ffe7;
+      border-left: 3px solid var(--military-accent);
       margin-left: 1.5em;
       padding-left: 2em;
       position: relative;
-      background: rgba(10,20,40,0.12);
+      background: rgba(10,20,40,0.10);
       border-radius: 8px;
+      max-width: 100vw;
+      box-sizing: border-box;
+      overflow-x: auto;
     }
     .timeline-event {
       margin-bottom: 2em;
       position: relative;
       font-family: 'Roboto Mono', monospace;
+      animation: fadeIn 1.2s;
+      max-width: 98vw;
+      box-sizing: border-box;
     }
     .timeline-event:before {
       content: '';
@@ -219,38 +374,52 @@
       top: 0.3em;
       width: 1.2em;
       height: 1.2em;
-      background: #00ffe7;
+      background: var(--military-accent);
       border-radius: 50%;
-      box-shadow: 0 0 8px #00ffe7;
-      border: 2px solid #232b36;
+      box-shadow: 0 0 8px var(--military-accent);
+      border: 2px solid var(--military-border);
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 8px var(--military-accent); }
+      100% { box-shadow: 0 0 24px var(--military-accent); }
     }
     .timeline-title {
       font-weight: bold;
-      color: #00ffe7;
+      color: var(--military-accent);
       font-size: 1.1em;
       letter-spacing: 0.04em;
-      text-shadow: 0 0 6px #00ffe7;
+      text-shadow: 0 0 4px var(--military-accent-dark);
+      max-width: 98vw;
+      box-sizing: border-box;
     }
     .timeline-desc {
-      color: #b2fefa;
+      color: var(--military-soft);
       margin-top: 0.2em;
       font-size: 1em;
       font-style: italic;
+      max-width: 98vw;
+      box-sizing: border-box;
     }
+    /* Contact glass */
     .contact {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 1.2em;
       background: rgba(10,20,40,0.13);
-      border-radius: 8px;
-      border: 1.5px solid #00ffe7;
-      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+      border-radius: 12px;
+      border: 1.5px solid var(--military-accent);
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.04);
       padding: 1.2em 0.5em;
+      backdrop-filter: blur(8px);
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
     }
     .contact input, .contact textarea {
       background: #1a2a3a;
-      border: 1px solid #00ffe7;
+      border: 1px solid var(--military-accent);
       border-radius: 6px;
       color: #fff;
       padding: 0.7em 1em;
@@ -258,48 +427,164 @@
       width: 100%;
       max-width: 400px;
       margin-bottom: 1em;
-      transition: border 0.2s;
+      transition: border var(--transition);
       font-family: 'Roboto Mono', monospace;
+      box-sizing: border-box;
     }
     .contact input:focus, .contact textarea:focus {
-      border: 1.5px solid #00ffe7;
+      border: 1.5px solid var(--military-accent);
       outline: none;
     }
     .contact button {
-      background: #00ffe7;
-      color: #0f2027;
+      background: var(--military-accent);
+      color: var(--military-black);
       border: none;
       border-radius: 6px;
       padding: 0.8em 2em;
       font-size: 1.1em;
-      font-family: 'Orbitron', monospace;
+      font-family: 'Share Tech Mono', monospace;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.12);
-      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.12);
+      transition: background var(--transition), color var(--transition);
       letter-spacing: 0.04em;
-      border: 2px solid #232b36;
+      border: 2px solid var(--military-border);
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
     }
     .contact button:hover {
-      background: #fff;
-      color: #00ffe7;
-      border-color: #00ffe7;
+      background: var(--military-alert);
+      color: #fff;
+      border-color: var(--military-alert);
+    }
+    /* Scroll to top button */
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 200;
+      background: var(--military-accent);
+      color: var(--military-black);
+      border: none;
+      border-radius: 50%;
+      width: 54px;
+      height: 54px;
+      box-shadow: 0 2px 16px var(--military-accent);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+    #scrollTopBtn:hover {
+      background: var(--military-alert);
+      color: #fff;
+      box-shadow: 0 0 32px var(--military-alert);
+    }
+    /* Mode sombre/clair toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 300;
+      background: var(--military-green-dark);
+      border: 1.5px solid var(--military-accent);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px 0 rgba(34,51,34,0.10);
+      transition: background var(--transition), border var(--transition);
+    }
+    .theme-toggle svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--military-accent);
+    }
+    .proofs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2em;
+      margin-bottom: 1.2em;
+    }
+    .proof-card {
+      background: rgba(0,0,0,0.13);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px 0 rgba(0,255,231,0.04);
+      border: 1px solid var(--military-accent);
+      padding: 1em;
+      flex: 1 1 220px;
+      min-width: 180px;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5em;
+      box-sizing: border-box;
+    }
+    .proof-card img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 0.5em;
+      object-fit: cover;
+      aspect-ratio: 16/9;
+      background: #232b36;
+      box-shadow: 0 1px 4px #0002;
+      display: block;
+      min-height: 80px;
+    }
+    .proof-card a {
+      color: var(--military-accent);
+      font-size: 1.05em;
+      text-decoration: underline;
+      word-break: break-all;
+      font-family: 'Share Tech Mono', monospace;
+      text-transform: uppercase;
+    }
+    .proof-card a:hover { color: var(--military-alert); }
+    .disclaimer {
+      font-size: 0.95em;
+      color: var(--military-soft);
+      background: rgba(34,51,34,0.18);
+      border-left: 4px solid var(--military-accent);
+      padding: 0.7em 1em;
+      border-radius: 8px;
+      margin: 2em 0 0 0;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .skills-categories {
+        flex-direction: column;
+        gap: 1.2em;
+      }
+      section {
+        padding: 1.5em 1vw;
+      }
     }
     @media (max-width: 900px) {
       section, #competences {
         width: 100% !important;
         overflow-x: visible !important;
+        padding: 1em 0.5em !important;
       }
-      .glow { font-size: 2.2em; }
-      h2 { font-size: 1.5em; }
-      .subtitle { font-size: 1.1em; max-width: 98vw; }
+      .hero-title { font-size: 1.3em; }
+      h2 { font-size: 1.1em; }
+      .hero-subtitle { font-size: 1em; max-width: 98vw; }
       .skills-list, .soft-list, .exp-list { gap: 0.8em; }
       .timeline { padding-left: 1.2em; margin-left: 0.7em; }
       .timeline-event:before { left: -1.3em; width: 1em; height: 1em; }
       .contact input, .contact textarea { max-width: 98vw; font-size: 1em; }
       .contact button { width: 100%; font-size: 1.05em; }
       #formMessage { font-size: 1.05em; }
-      svg[width="90"] { width: 70px !important; height: 70px !important; }
       .skills-categories, .skill-block {
         display: block !important;
         width: 100% !important;
@@ -317,13 +602,13 @@
       section, #competences {
         width: 100% !important;
         overflow-x: visible !important;
+        padding: 0.5em 0.2em !important;
       }
-      header { min-height: 30vh; padding: 1em 0.2em; }
       nav { flex-direction: column; gap: 0.7em; margin-bottom: 1em; }
       nav a { font-size: 1em; }
-      .glow { font-size: 1.5em; }
-      h2 { font-size: 1.1em; }
-      .subtitle { font-size: 0.98em; max-width: 98vw; }
+      .hero-title { font-size: 1em; }
+      h2 { font-size: 0.98em; }
+      .hero-subtitle { font-size: 0.95em; max-width: 98vw; }
       section { padding: 1em 0.2em; }
       .skills-list, .soft-list, .exp-list { flex-direction: column; gap: 0.7em; }
       .timeline { padding-left: 0.7em; margin-left: 0.2em; }
@@ -331,7 +616,6 @@
       .contact input, .contact textarea { max-width: 98vw; font-size: 0.98em; }
       .contact button { width: 100%; font-size: 1em; }
       #formMessage { font-size: 1em; }
-      svg[width="90"] { width: 48px !important; height: 48px !important; }
       .skills-categories, .skill-block {
         display: block !important;
         width: 100% !important;
@@ -349,13 +633,13 @@
       section, #competences {
         width: 100% !important;
         overflow-x: visible !important;
+        padding: 0.2em 0.1em !important;
       }
-      .glow { font-size: 1em; }
-      h2 { font-size: 0.9em; }
-      .subtitle { font-size: 0.85em; }
+      .hero-title { font-size: 0.9em; }
+      h2 { font-size: 0.85em; }
+      .hero-subtitle { font-size: 0.85em; }
       .contact input, .contact textarea { font-size: 0.8em; }
       .contact button { font-size: 0.85em; }
-      svg[width="90"] { width: 32px !important; height: 32px !important; }
       .skills-categories, .skill-block {
         display: block !important;
         width: 100% !important;
@@ -371,165 +655,255 @@
     }
   </style>
 </head>
-<body>
-  <header>
-    <div style="margin-top:2em;">
-      <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:auto;">
-        <defs>
-          <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#00ffe7" stop-opacity="0.8"/>
-            <stop offset="100%" stop-color="#0f2027" stop-opacity="0.1"/>
-          </radialGradient>
-        </defs>
-        <circle cx="45" cy="45" r="40" fill="url(#glow)"/>
-        <path d="M30 60 L45 20 L60 60 Z" fill="#00ffe7" stroke="#fff" stroke-width="2"/>
-        <text x="45" y="70" text-anchor="middle" font-family="'Orbitron', monospace" font-size="18" fill="#fff" style="letter-spacing:2px;">MOB</text>
-      </svg>
-    </div>
-    <div class="glow">NSABreachX</div>
-    <div class="subtitle">Portfolio d'excellence en cybersécurité offensive, reverse engineering et innovation. Découvrez un parcours unique, des compétences de pointe et des réalisations reconnues internationalement.</div>
-    <nav>
-      <a href="#about">À propos</a>
-      <a href="#competences">Compétences</a>
-      <a href="#realisations">Réalisations</a>
-      <a href="#experience">Expérience</a>
-      <a href="#contact">Contact</a>
-      <a href="https://tryhackme.com/p/NSABreachX" target="_blank" rel="noopener" style="color:#fff; text-shadow:0 0 8px #00ffe7;">TryHackMe</a>
-    </nav>
-  </header>
-
-  <section id="about">
+<body aria-label="Portfolio de NSABreachX">
+  <button class="bg-toggle" id="bgToggle" aria-label="Désactiver/activer le fond animé" title="Désactiver/activer le fond animé">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></svg>
+  </button>
+  <nav aria-label="Navigation principale">
+    <a href="#hero" class="active"><span aria-hidden="true">🏠</span>Accueil</a>
+    <a href="#about"><span aria-hidden="true">👤</span>À propos</a>
+    <a href="#realisations"><span aria-hidden="true">🚀</span>Réalisations</a>
+    <a href="#competences"><span aria-hidden="true">🛡️</span>Compétences</a>
+    <a href="#experience"><span aria-hidden="true">📜</span>Expérience</a>
+    <a href="#contact"><span aria-hidden="true">✉️</span>Contact</a>
+    <a href="https://tryhackme.com/p/notimplemented" target="_blank" rel="noopener" style="color:#fff; text-shadow:0 0 8px #00ffe7;" aria-label="Profil TryHackMe"><span aria-hidden="true">🔗</span>TryHackMe</a>
+  </nav>
+  <main id="main-content" tabindex="-1">
+    <section class="hero" id="hero" aria-label="Présentation">
+      <div class="hero-avatar" aria-hidden="true" style="overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, var(--military-accent) 60%, var(--military-green-dark) 100%);box-shadow:0 0 0 3px var(--military-accent),0 0 12px var(--military-accent);">
+        <img src="https://avatars.githubusercontent.com/u/217643410?v=4" alt="Avatar GitHub" style="width:100px;height:100px;border-radius:50%;border:3px solid var(--military-accent);box-shadow:0 0 24px var(--military-accent);object-fit:cover;background:#222;" loading="lazy" />
+      </div>
+      <div class="hero-title">NSABreachX</div>
+      <div class="hero-subtitle">Bienvenue sur mon portfolio. Ce site présente mon parcours, mes compétences et mes réalisations en cybersécurité et développement.</div>
+      <div class="hero-cta">
+        <a href="#contact">Me contacter</a>
+      </div>
+    </section>
+          
+    <section id="about" aria-label="À propos">
     <h2>À propos</h2>
-    <div style="font-size:1.15em;line-height:1.7;color:#b2fefa;max-width:700px;margin:auto;text-align:center;">
-      <span style="font-weight:bold;color:#00ffe7;">Expert en cybersécurité offensive, reverse engineering et innovation.</span><br>
-      Passionné par la recherche de vulnérabilités, la création d’outils avancés et l’automatisation de la sécurité, j’ai mené des projets d’envergure, publié des CVEs, et contribué à la communauté internationale.<br>
-      Mon approche : repousser les limites de la sécurité, innover, et transmettre mon savoir.
-    </div>
+      <div style="font-size:1.08em;line-height:1.7;color:#b2fefa;max-width:700px;margin:auto;text-align:center;">
+        <b>Statut :</b> Consultant indépendant en cybersécurité offensive et reverse engineering<br>
+        <b>Spécialités :</b> Pentest, exploitation de vulnérabilités, reverse engineering, sécurité cloud, sécurité applicative, threat hunting, réponse à incident<br>
+        <b>Valeurs :</b> Éthique, rigueur, partage, innovation, confidentialité<br>
+        <b>Clients :</b> Entreprises, institutions, particuliers, bug bounty, open source<br>
+        <b>Zone d'intervention :</b> International (missions à distance ou sur site selon besoins)<br>
+      </div>
   </section>
-
-  <section id="competences">
-    <h2>Compétences techniques</h2>
+    <section id="competences" aria-label="Compétences techniques et transverses">
+    <h2>Compétences techniques démontrées</h2>
     <div class="skills-categories">
       <div class="skill-block">
-        <h3><span style="font-size:1.2em;">🛡️</span> Hacking offensif</h3>
+        <h3><span aria-hidden="true">🛡️</span> Exploitation Kernel & Systèmes</h3>
         <ul class="skills-list">
-          <li><b>Recherche & exploitation 0day</b> — Découverte et exploitation de failles inédites sur systèmes, applications, réseaux et protocoles.</li>
-          <li><b>Reverse engineering avancé</b> — Analyse de binaires, firmware, drivers, OS, pour comprendre et détourner la logique interne.</li>
-          <li><b>Exploitation mémoire & kernel</b> — Maîtrise des techniques d’exploitation bas niveau (buffer overflow, kernel panic, rootkit, bootkit...)</li>
-          <li><b>Hacking RF & GSM</b> — Interception, analyse et détournement de signaux (SIGINT, HUMINT, TECHINT).</li>
-          <li><b>Automatisation offensive</b> — Développement d’outils sur-mesure pour industrialiser l’exploitation de vulnérabilités.</li>
-          <li><b>Cryptographie avancée</b> — Attaques et détournements de protocoles de chiffrement modernes.</li>
-          <li>Prise de contrôle d’infrastructures (web, systèmes, réseaux, mobiles, hardware)</li>
-          <li>Création et modification de firmware, patchs, sabotage, propagation</li>
-          <li>OSINT avancé, exfiltration massive, récupération de documents confidentiels</li>
-          <li>Manipulation d’outils spécialisés (Shodan, Censys, Fofa, IntelX)</li>
+          <li>Recherche, identification et exploitation de vulnérabilités critiques dans le kernel Linux et Android (LPE, RCE, Write-What-Where, sabotage mapping, kernel panic contrôlé)</li>
+          <li>Développement d’exploits kernel avancés : élévation de privilèges, exécution de code arbitraire, persistence boot2root, rootkit</li>
+          <li>Bypass de protections kernel : SMEP, SMAP, sandbox, gestion fine des VMA, manipulation de compteurs de référence (get_file/fput)</li>
+          <li>Analyse et exploitation de primitives d’écriture arbitraire (Write-What-Where) dans des modules sensibles (BTRFS, mmap, ioctl)</li>
         </ul>
       </div>
       <div class="skill-block">
-        <h3><span style="font-size:1.2em;">🔒</span> Hacking défensif & sécurité</h3>
+        <h3><span aria-hidden="true">🔬</span> Reverse Engineering & Analyse de binaires</h3>
         <ul class="skills-list">
-          <li><b>OPSEC, anonymisation</b> — Sécurité opérationnelle et protection de l’identité numérique.</li>
-          <li><b>Conception de VPN, réseaux décentralisés</b> — Création de tunnels chiffrés et d’architectures sécurisées.</li>
-          <li><b>Création d’algorithmes de chiffrement</b> — Développement de solutions de sécurité sur-mesure.</li>
-          <li><b>Détection et mitigation de vulnérabilités</b> — Patchs, correctifs, hardening, audit de code source.</li>
-          <li><b>Transformation offensive → défensive</b> — Utilisation de techniques d’attaque pour renforcer la défense.</li>
-          <li>Mise en place de sécurité de haut niveau (I2P, Zeronet, réseaux privés)</li>
-          <li>Audit, pentest, analyse de code source, prédiction de comportements systèmes</li>
+          <li>Reverse engineering d’APK (Messenger), firmware baseband (GSM, Samsung S20), protocoles propriétaires et modules kernel</li>
+          <li>Extraction et compréhension de la logique de génération de secrets (Session ID, clés de chiffrement, signatures)</li>
+          <li>Développement d’outils d’analyse automatique (dumpers, extracteurs de patterns, scripts de reverse)</li>
         </ul>
       </div>
       <div class="skill-block">
-        <h3><span style="font-size:1.2em;">💻</span> Programmation & développement</h3>
+        <h3><span aria-hidden="true">📱</span> Exploitation Mobile & Télécom</h3>
         <ul class="skills-list">
-          <li><b>Langages</b> : C (exploits, rootkits), Python (outils, scripts, exploits), SQL, Bash, Batch</li>
-          <li><b>Polyvalence</b> : capacité à coder dans tout langage avec documentation</li>
-          <li>Création d’interpréteurs, automates, outils d’analyse et d’exploitation</li>
-          <li>Développement d’outils d’espionnage, d’interception, de décodage</li>
-          <li>Conception de requêtes SQL haut niveau, automatisation de tâches complexes</li>
-          <li>Reverse engineering logiciel, patch, modification de binaires</li>
+          <li>Exploitation de failles sur smartphones nouvelle génération (Android, Samsung S20)</li>
+          <li>Interception, déchiffrement et manipulation de communications GSM (baseband, SRTP)</li>
+          <li>Exploitation de firmware modem, injection de code, manipulation de signaux radio pour propagation et attaque à grande échelle</li>
+          <li>Transformation d’exploits locaux en attaques 0click/one click, propagation automatique sur réseau mobile</li>
         </ul>
       </div>
       <div class="skill-block">
-        <h3><span style="font-size:1.2em;">🚀</span> Innovation & recherche</h3>
+        <h3><span aria-hidden="true">🧠</span> Exploitation Applicative & Logique</h3>
         <ul class="skills-list">
-          <li>Création d’outils et d’algorithmes inédits en cybersécurité</li>
-          <li>Développement de méthodologies d’exploitation et de défense</li>
-          <li>Rédaction de théories sur la sécurité, la cryptographie, la physique appliquée</li>
-          <li>Veille technologique, adaptation rapide aux nouvelles menaces</li>
-          <li>Expérience en création d’IA, LLM, automation de la cybersécurité</li>
+          <li>Exploitation de failles logiques dans des applications majeures (Messenger, Facebook)</li>
+          <li>Prise de contrôle de comptes via manipulation de session ID, extraction de clés, contournement de la sécurité applicative</li>
+          <li>Automatisation de l’exploitation et de l’extraction de secrets via scripts et outils maison</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3><span aria-hidden="true">⚡</span> Offensive Automation & Propagation</h3>
+        <ul class="skills-list">
+          <li>Développement d’outils d’automatisation d’attaque, de propagation et d’extraction de données sensibles</li>
+          <li>Conception de payloads pour propagation réseau, infection de masse, relais RF, social engineering</li>
+          <li>Capacité à transformer une faille locale en attaque à grande échelle (propagation, persistence, 0click)</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3><span aria-hidden="true">🛡️</span> Développement de Rootkits & Persistence</h3>
+        <ul class="skills-list">
+          <li>Développement de rootkits kernel, modules de persistence, boot2root, effacement de traces</li>
+          <li>Exploitation de crash kernel (panic) pour injection de code, élévation de privilèges et persistence</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3><span aria-hidden="true">🔗</span> Bypass & Chaînes d’Exploitation</h3>
+        <ul class="skills-list">
+          <li>Construction de chaînes d’exploitation multi-vulnérabilités (kernel, userland, firmware, applicatif)</li>
+          <li>Bypass de protections avancées (signature, sandbox, SMEP/SMAP, SRTP, etc.)</li>
+          <li>Exploitation de race conditions, inversion logique, sabotage de mapping mémoire</li>
         </ul>
       </div>
     </div>
-    <h2>Soft skills</h2>
+    <h2>Compétences transverses et soft skills démontrés</h2>
     <ul class="soft-list">
-      <li>Management d’équipe, leadership, création de communauté</li>
-      <li>HUMINT (social engineering, manipulation humaine)</li>
-      <li>Stratégie, résolution de problèmes, innovation</li>
-      <li>Analyse logique, prédiction de systèmes</li>
-      <li>Communication, adaptation, rapidité d’apprentissage</li>
-      <li>Traitement rapide de l’information, prise de décision</li>
-      <li>Utilisation avancée de l’OSINT, TECHINT, HUMINT, SIGINT</li>
+      <li>Veille et innovation : capacité à découvrir des failles inédites sur des cibles de haut niveau (kernel, baseband, applications majeures)</li>
+      <li>Rigueur et documentation : rédaction de PoC, documentation technique, analyse détaillée des vulnérabilités</li>
+      <li>Automatisation : développement d’outils, scripts, extracteurs, dumpers, modules d’exploitation</li>
+      <li>Adaptabilité : exploitation sur de multiples plateformes (Linux, Android, mobile, télécom, cloud)</li>
+      <li>Esprit offensif : capacité à penser comme un attaquant, à transformer une faille en attaque globale</li>
+      <li>Communication : vulgarisation technique, partage de découvertes, rédaction de rapports et de documentation</li>
     </ul>
   </section>
 
-  <section id="realisations">
-    <h2>Réalisations</h2>
-    <ul class="exp-list">
-      <li><span style="background:#00ffe7;color:#0f2027;padding:0.2em 0.7em;border-radius:6px;font-weight:bold;">0day</span> Découverte de vulnérabilités 0day sur GSM, Messenger, Windows, Linux, Firefox</li>
-      <li>Création d’outils d’automatisation d’exploitation de failles 0day</li>
-      <li>Reverse engineering de modules GSM, OS, kernel, drivers</li>
-      <li>Création de rootkits, bootkits, spyware, worm avancés</li>
-      <li><span style="background:#00ffe7;color:#0f2027;padding:0.2em 0.7em;border-radius:6px;font-weight:bold;">TryHackMe</span> Certifications (<a href="https://tryhackme.com/p/NSABreachX" target="_blank" rel="noopener" style="color:#00ffe7;">voir profil</a>)</li>
-      <li>Récupération de fichiers confidentiels dans le cadre de tests d’intrusion</li>
-      <li>Création d’algorithmes de chiffrement et de sécurité</li>
-      <li>Prise de contrôle de systèmes et infrastructures lors de pentests</li>
-      <li>Vente de vulnérabilités 0day à des sociétés spécialisées comme Zerodium</li>
-      <li><span style="background:#00ffe7;color:#0f2027;padding:0.2em 0.7em;border-radius:6px;font-weight:bold;">CVE</span> Publication de 2 CVEs officielles</li>
-      <li>Création d’une communauté regroupant 1000 membres</li>
-      <li>Développement de logiciels professionnels en quantité massive</li>
-    </ul>
-  </section>
-
-  <section id="experience">
-    <h2>Expérience & exploits</h2>
-    <div class="timeline">
-      <div class="timeline-event">
-        <div class="timeline-title">Reverse engineering & exploitation kernel Linux</div>
-        <div class="timeline-desc">Exploitation de pointeurs, vulnérabilités Write What Where, kernel panic, élévation de privilèges, patchs, etc.</div>
+  <section id="0day" aria-label="0day découverts">
+    <h2>0day découverts & impact</h2>
+    <div class="skills-categories">
+      <div class="skill-block">
+        <h3>0day Kernel Panic RCE (Smartphones)</h3>
+        <ul class="skills-list">
+          <li>Vulnérabilité logique, exploitation du kernel panic pour exécution de code, élévation de privilèges, contournement des sécurités mémoire (VMA)</li>
+          <li>Prise de contrôle totale, persistence, propagation réseau, transformation possible en 0click</li>
+        </ul>
       </div>
-      <div class="timeline-event">
-        <div class="timeline-title">Automatisation de l’exploitation 0day</div>
-        <div class="timeline-desc">Développement d’outils pour exploiter et extraire des données de failles 0day à l’échelle professionnelle.</div>
+      <div class="skill-block">
+        <h3>Messenger 0day (APK Facebook Messenger)</h3>
+        <ul class="skills-list">
+          <li>Reverse engineering, manipulation de session ID, exploitation de la logique de génération, extraction de clés, prise de contrôle de compte</li>
+          <li>Prise de contrôle de comptes, exécution de code, contournement de la sécurité applicative</li>
+        </ul>
       </div>
-      <div class="timeline-event">
-        <div class="timeline-title">Prise de contrôle d’infrastructures</div>
-        <div class="timeline-desc">Contrôle de systèmes, exploitation de vulnérabilités logiques, détournement de communications lors de missions de sécurité.</div>
+      <div class="skill-block">
+        <h3>GSM 0day (Samsung S20, baseband)</h3>
+        <ul class="skills-list">
+          <li>Injection de code, interception/déchiffrement de communications, exploitation firmware baseband, manipulation SRTP</li>
+          <li>Interception, déchiffrement, manipulation de communications GSM, attaque sur la confidentialité</li>
+        </ul>
       </div>
-      <div class="timeline-event">
-        <div class="timeline-title">Innovation & recherche</div>
-        <div class="timeline-desc">Création d’outils, algorithmes, et méthodologies appliquées à la cybersécurité.</div>
+      <div class="skill-block">
+        <h3>0DAY Mapping Sabotage (Linux kernel mmap.c)</h3>
+        <ul class="skills-list">
+          <li>Sabotage du mapping mémoire, Write-What-Where, LPE, persistence boot2root, bypass SMEP/SMAP</li>
+          <li>Crash kernel, élévation de privilèges, persistence, rootkit</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3>Write-What-Where Kernel mmap (Linux BTRFS)</h3>
+        <ul class="skills-list">
+          <li>Vulnérabilité Write-What-Where dans extent_io.c et ioctl.c, exploitation de pointeurs utilisateurs non validés</li>
+          <li>Écriture arbitraire, exécution de code, compromission du système</li>
+        </ul>
+      </div>
+      <div class="skill-block">
+        <h3>Kernel Mapping Desync 0day</h3>
+        <ul class="skills-list">
+          <li>Inversion logique get_file/fput, crash mapping, LPE, exploitation multi-chaîne, rootkit</li>
+          <li>Crash kernel, élévation de privilèges, persistence, rootkit</li>
+        </ul>
       </div>
     </div>
+    <div style="margin-top:2em;font-size:1.1em;color:var(--military-accent);text-align:center;font-family:'Share Tech Mono',monospace;">
+      <b>Résumé de profil :</b><br>
+      Expert en cybersécurité offensive, kernel et mobile, démontrant une capacité rare à découvrir, analyser et exploiter des vulnérabilités critiques sur des systèmes complexes (Linux, Android, baseband, applications majeures). Maîtrise avancée du reverse engineering, de l’exploitation kernel, de la propagation offensive, du développement de rootkits et de l’automatisation d’attaques. Capacité à transformer une faille locale en attaque à grande échelle, à bypasser des protections de haut niveau, et à documenter rigoureusement chaque étape.
+    </div>
   </section>
-
-  <section id="contact">
-    <h2>Contact</h2>
-    <form id="contactForm" class="contact" autocomplete="off">
-      <input type="text" name="name" placeholder="Votre nom" required>
-      <input type="email" name="email" placeholder="Votre email" required>
-      <textarea name="message" rows="5" placeholder="Votre message" required></textarea>
+    <section id="experience" aria-label="Expérience professionnelle">
+      <h2>Expérience & missions</h2>
+      <div class="timeline">
+        <div class="timeline-event">
+          <div class="timeline-title">Exemples d'expériences</div>
+          <div class="timeline-desc">
+            <ul class="exp-list">
+              <li>Reverse engineering de protocoles d'authentification (ex : génération de tokens de session)</li>
+              <li>Développement d'outils d'espionnage, d'interception de communication, et de décodage hardware</li>
+              <li>Développement de rootkits, bootkits, spyware</li>
+              <li>Prise de contrôle d'infrastructures et d'environnements variés</li>
+              <li>Top 8% sur TryHackMe en moins de 3h</li>
+              <li>8 certifications TryHackMe (parcours Ejpt learning, etc.)</li>
+              <li>Exploitation de vulnérabilités logiques (ex : IDOR, DocID non sécurisé)</li>
+              <li>Découverte de failles sur des modules GSM Android, Firefox, etc.</li>
+              <li>Création d'outils d'extraction de données sensibles (dumper, etc.)</li>
+              <li>Vente de vulnérabilités 0day à des plateformes spécialisées</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-event">
+        <div class="timeline-title">Travail sur le kernel Linux</div>
+        <div class="timeline-desc">
+          Exploitation de vulnérabilités de type Write What Where sur des drivers Linux, injection de code, élévation de privilèges via kernel panic, analyse et manipulation de fonctions critiques (fput, fget, memcpy, etc.).
+        </div>
+        </div>
+        <div class="timeline-event">
+        <div class="timeline-title">Procédé de reverse engineering</div>
+        <div class="timeline-desc">
+          <ul class="exp-list">
+            <li>Décompilation avec IDA, Ghidra</li>
+            <li>Cartographie et analyse des fonctions critiques</li>
+            <li>Notation des offsets, analyse de la logique et de la sécurité du code</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="timeline-title">Preuves et réalisations</div>
+        <div class="timeline-desc">
+          <ul class="exp-list">
+            <li>Méthode d'exploitation de vulnérabilités pour accéder à des ressources interdites (ex : contournement 403 via cache Google et spoofing)</li>
+            <li>Développement d'outils d'automatisation pour l'exploitation de failles (IDOR, 0day, etc.)</li>
+            <li>Automatisation industrielle de l'exploitation de vulnérabilités</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-event">
+        <div class="timeline-title">Résumé Reverse Engineering</div>
+        <div class="timeline-desc">
+          Débutant en reverse engineering, progression rapide avec analyses sur kernel, drivers, applications mobiles et modules GSM, et application sur des cas concrets en cybersécurité offensive.
+        </div>
+        </div>
+      </div>
+    </section>
+    <section id="contact" aria-label="Contact">
+      <h2>Contact</h2>
+      <form id="contactForm" class="contact" autocomplete="off" aria-label="Formulaire de contact">
+        <input type="text" name="name" placeholder="Votre nom" required aria-label="Votre nom">
+        <input type="email" name="email" placeholder="Votre email" required aria-label="Votre email">
+        <textarea name="message" rows="5" placeholder="Votre message" required aria-label="Votre message"></textarea>
       <button type="submit">Envoyer</button>
     </form>
     <div id="formMessage" style="display:none;margin-top:1em;font-weight:bold;color:#00ffe7;text-align:center;"></div>
-  </section>
-
+    </section>
+    <section class="disclaimer" aria-label="Mentions légales et éthiques">
+      <b>Mentions légales & éthiques :</b><br>
+      Ce site ne présente que des informations factuelles et vérifiables. Toute demande contraire à l'éthique ou à la loi sera systématiquement refusée. Pour plus d'informations ou pour consulter mes publications, rendez-vous sur <a href="https://nsabreachx.githubio" target="_blank" rel="noopener">mon GitHub</a>.
+    </section>
+  </main>
   <footer style="text-align:center; color:#00ffe7; margin:2em 0 1em 0; font-family:'Orbitron', monospace; letter-spacing:0.08em; border-top:2px solid #00ffe7; background:rgba(10,20,40,0.7); padding:1em 0;">
-    <span style="font-size:1.1em;">&copy; 2025 NSABreachX</span> <br>
-    <span style="font-size:0.95em;opacity:0.7;">Design Fais par NSABreachX.</span>
-  </footer>
-
+    <span style="font-size:1.1em;">&copy; 2025 NSABreachX</span> — Portfolio professionnel, consultant cybersécurité, reverse engineering.<br>
+    <span style="font-size:0.95em;opacity:0.7;">Design sobre, accessible, et éthique.</span>
+    </footer>
   <script>
-    // Animation d’apparition des sections au scroll
-    const sections = document.querySelectorAll('section');
+    // Désactivation du fond animé
+    const bgToggle = document.getElementById('bgToggle');
+    bgToggle.addEventListener('click', () => {
+      document.body.classList.toggle('no-bg');
+      if(document.body.classList.contains('no-bg')) {
+        document.body.style.setProperty('background', '#10151c');
+        document.body.style.setProperty('background-image', 'none');
+        document.body.style.setProperty('background-color', '#10151c');
+        document.body.style.setProperty('transition', 'background 0.3s');
+      } else {
+        document.body.style.removeProperty('background');
+        document.body.style.removeProperty('background-image');
+        document.body.style.removeProperty('background-color');
+      }
+    });
+    // Animation d'apparition des sections au scroll (CSS only, fallback JS très léger)
+    const sections = document.querySelectorAll('main section');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -543,14 +917,12 @@
       section.style.transform = 'translateY(40px)';
       observer.observe(section);
     });
-    // Fallback : forcer l'affichage de toutes les sections après 1 seconde (corrige le bug mobile)
     setTimeout(() => {
-      document.querySelectorAll('section').forEach(section => {
+      document.querySelectorAll('main section').forEach(section => {
         section.style.opacity = 1;
         section.style.transform = 'translateY(0)';
       });
     }, 1000);
-
     // Formulaire contact avec vérification d'envoi
     document.getElementById('contactForm').addEventListener('submit', async function(e) {
       e.preventDefault();
