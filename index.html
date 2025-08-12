@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Notes & Project Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-280px);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section h3 {
+            color: #4a5568;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 0.25rem;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-item .icon {
+            margin-right: 0.75rem;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s ease;
+        }
+
+        .toggle-sidebar:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.2s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            color: #4a5568;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        /* Content Area */
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Notes Section */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .note-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .note-card .note-type {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.25rem 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .note-card h3 {
+            margin-bottom: 0.75rem;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+
+        .note-card p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .note-card .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .note-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+        }
+
+        /* Editor */
+        .note-editor {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            position: fixed;
+            top: 5%;
+            left: 5%;
+            right: 5%;
+            bottom: 5%;
+            z-index: 1000;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .note-editor.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .editor-title {
+            flex: 1;
+            padding: 0.5rem 0;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: transparent;
+        }
+
+        .editor-title:focus {
+            outline: none;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem;
+            border: none;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toolbar-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .editor-content {
+            flex: 1;
+            border: none;
+            resize: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            background: transparent;
+            padding: 1rem 0;
+        }
+
+        .editor-content:focus {
+            outline: none;
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .note-type-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .type-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            background: transparent;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+        }
+
+        .type-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Projects Section */
+        .project-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-column {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .column-title {
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .task-count {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .task-item {
+            background: white;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: grab;
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .task-item:active {
+            cursor: grabbing;
+        }
+
+        .task-priority {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .priority-high { background: #ef4444; }
+        .priority-medium { background: #f59e0b; }
+        .priority-low { background: #10b981; }
+
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            text-align: center;
+        }
+
+        .dashboard-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-label {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 1rem;
+            }
+
+            .search-bar {
+                margin: 0 1rem;
+                max-width: none;
+            }
+
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .note-editor {
+                top: 2%;
+                left: 2%;
+                right: 2%;
+                bottom: 2%;
+                padding: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Color Categories */
+        .category-idea { border-left: 4px solid #8b5cf6; }
+        .category-task { border-left: 4px solid #06b6d4; }
+        .category-project { border-left: 4px solid #10b981; }
+        .category-journal { border-left: 4px solid #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1>CreativeSpace</h1>
+                <p style="font-size: 0.8rem; color: #9ca3af; margin-top: 0.5rem;">Notes & Projects</p>
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <h3>Principal</h3>
+                    <button class="nav-item active" onclick="showPage('dashboard')">
+                        <span class="icon">📊</span>
+                        Tableau de bord
+                    </button>
+                    <button class="nav-item" onclick="showPage('notes')">
+                        <span class="icon">📝</span>
+                        Mes Notes
+                    </button>
+                    <button class="nav-item" onclick="showPage('projects')">
+                        <span class="icon">🚀</span>
+                        Projets
+                    </button>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Créativité</h3>
+                    <button class="nav-item" onclick="showPage('ideas')">
+                        <span class="icon">💡</span>
+                        Idées
+                    </button>
+                    <button class="nav-item" onclick="showPage('journal')">
+                        <span class="icon">📖</span>
+                        Journal
+                    </button>
+                    <button class="nav-item" onclick="showPage('templates')">
+                        <span class="icon">📋</span>
+                        Templates
+                    </button>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Organisation</h3>
+                    <button class="nav-item" onclick="showPage('calendar')">
+                        <span class="icon">📅</span>
+                        Calendrier
+                    </button>
+                    <button class="nav-item" onclick="showPage('tags')">
+                        <span class="icon">🏷️</span>
+                        Tags
+                    </button>
+                    <button class="nav-item" onclick="showPage('archive')">
+                        <span class="icon">📦</span>
+                        Archive
+                    </button>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Header -->
+            <header class="header">
+                <button class="toggle-sidebar" onclick="toggleSidebar()">
+                    <span style="font-size: 1.5rem;">☰</span>
+                </button>
+
+                <div class="search-bar">
+                    <input type="text" placeholder="Rechercher dans vos notes et projets...">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="showQuickAdd()">
+                        <span>⚡</span>
+                        Quick Add
+                    </button>
+                    <button class="btn btn-primary" onclick="openNoteEditor()">
+                        <span>✏️</span>
+                        Nouvelle Note
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Page -->
+                <div id="dashboard" class="page active">
+                    <h2>Tableau de bord</h2>
+                    <p style="color: #4a5568; margin-bottom: 2rem;">Vue d'ensemble de votre espace créatif</p>
+                    
+                    <div class="dashboard-grid fade-in-up">
+                        <div class="dashboard-card">
+                            <div class="dashboard-number" id="notesCount">0</div>
+                            <div class="dashboard-label">Notes totales</div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-number" id="projectsCount">0</div>
+                            <div class="dashboard-label">Projets actifs</div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-number" id="ideasCount">0</div>
+                            <div class="dashboard-label">Idées capturées</div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-number" id="tasksCount">0</div>
+                            <div class="dashboard-label">Tâches en cours</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes Page -->
+                <div id="notes" class="page">
+                    <h2>Mes Notes</h2>
+                    <p style="color: #4a5568; margin-bottom: 2rem;">Organisez et retrouvez facilement toutes vos notes</p>
+                    
+                    <div class="notes-grid" id="notesGrid">
+                        <!-- Notes will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Projects Page -->
+                <div id="projects" class="page">
+                    <h2>Gestion de Projets</h2>
+                    <p style="color: #4a5568; margin-bottom: 2rem;">Organisez vos projets avec un système Kanban</p>
+                    
+                    <div class="project-board">
+                        <div class="project-column">
+                            <div class="column-header">
+                                <span class="column-title">À faire</span>
+                                <span class="task-count">3</span>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-priority priority-high"></span>
+                                <strong>Design du site web</strong>
+                                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #4a5568;">Créer les maquettes principales</p>
+                                <div class="note-tags">
+                                    <span class="tag">Design</span>
+                                    <span class="tag">Urgent</span>
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-priority priority-medium"></span>
+                                <strong>Recherche utilisateurs</strong>
+                                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #4a5568;">Interviews et questionnaires</p>
+                                <div class="note-tags">
+                                    <span class="tag">Recherche</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-column">
+                            <div class="column-header">
+                                <span class="column-title">En cours</span>
+                                <span class="task-count">2</span>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-priority priority-high"></span>
+                                <strong>Développement API</strong>
+                                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #4a5568;">Endpoints principaux</p>
+                                <div class="note-tags">
+                                    <span class="tag">Dev</span>
+                                    <span class="tag">Backend</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-column">
+                            <div class="column-header">
+                                <span class="column-title">Terminé</span>
+                                <span class="task-count">5</span>
+                            </div>
+                            <div class="task-item">
+                                <span class="task-priority priority-low"></span>
+                                <strong>Setup environnement</strong>
+                                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #4a5568;">Configuration initiale</p>
+                                <div class="note-tags">
+                                    <span class="tag">Setup</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ideas Page -->
+                <div id="ideas" class="page">
+                    <h2>Mes Idées</h2>
+                    <p style="color: #4a5568; margin-bottom: 2rem;">Capturez et développez vos idées créatives</p>
+                    
+                    <div class="notes-grid">
+                        <div class="note-card category-idea">
+                            <div class="note-type">Idée</div>
+                            <h3>Application de méditation</h3>
+                            <p>Une app qui combine méditation et productivité avec des sessions courtes intégrées dans les pauses travail...</p>
+                            <div class="note-meta">
+                                <div class="note-tags">
+                                    <span class="tag">App</span>
+                                    <span class="tag">Bien-être</span>
+                                </div>
+                                <span>Il y a 2 jours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Journal Page -->
+                <div id="journal" class="page">
+                    <h2>Journal Personnel</h2>
+                    <p style="color: #4a5568; margin-bottom: 2rem;">Réflexions et observations quotidiennes</p>
+                    
+                    <div class="notes-grid">
+                        <div class="note-card category-journal">
+                            <div class="note-type">Journal</div>
+                            <h3>Réflexions du jour</h3>
+                            <p>Aujourd'hui j'ai réalisé l'importance de prendre des pauses régulières pour maintenir la créativité...</p>
+                            <div class="note-meta">
+                                <div class="note-tags">
+                                    <span class="tag">Réflexion</span>
+                                    <span class="tag">Personnel</span>
+                                </div>
+                                <span>Aujourd'hui</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other pages placeholder -->
+                <div id="templates" class="page">
+                    <h2>Templates</h2>
+                    <p>Modèles prédéfinis pour vos notes et projets</p>
+                </div>
+
+                <div id="calendar" class="page">
+                    <h2>Calendrier</h2>
+                    <p>Vue calendaire de vos notes et tâches</p>
+                </div>
+
+                <div id="tags" class="page">
+                    <h2>Gestion des Tags</h2>
+                    <p>Organisez vos étiquettes</p>
+                </div>
+
+                <div id="archive" class="page">
+                    <h2>Archive</h2>
+                    <p>Notes et projets archivés</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Note Editor Modal -->
+    <div class="note-editor" id="noteEditor">
+        <div class="editor-header">
+            <input type="text" class="editor-title" placeholder="Titre de la note..." id="noteTitle">
+            <button class="btn btn-secondary" onclick="closeNoteEditor()">✕</button>
+        </div>
+        
+        <div class="editor-toolbar">
+            <button class="toolbar-btn" onclick="formatText('bold')" title="Gras">𝐁</button>
+            <button class="toolbar-btn" onclick="formatText('italic')" title="Italique">𝐼</button>
+            <button class="toolbar-btn" onclick="formatText('underline')" title="Souligné">𝐔</button>
+            <button class="toolbar-btn" onclick="insertList()" title="Liste">📝</button>
+            <button class="toolbar-btn" onclick="insertLink()" title="Lien">🔗</button>
+        </div>
+        
+        <textarea class="editor-content" id="noteContent" placeholder="Commencez à écrire..."></textarea>
+        
+        <div class="editor-footer">
+            <div class="note-type-selector">
+                <button class="type-btn active" data-type="note">Note</button>
+                <button class="type-btn" data-type="idea">Idée</button>
+                <button class="type-btn" data-type="task">Tâche</button>
+                <button class="type-btn" data-type="journal">Journal</button>
+            </div>
+            
+            <div>
+                <button class="btn btn-secondary" onclick="closeNoteEditor()">Annuler</button>
+                <button class="btn btn-primary" onclick="saveNote()">Sauvegarder</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentPage = 'dashboard';
+        let notes = [];
+        let projects = [];
+        let currentNoteId = null;
+        let userFingerprint = '';
+        
+        // Generate unique user fingerprint
+        async function generateUserFingerprint() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('User fingerprint', 2, 2);
+            
+            const fingerprint = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                cookieEnabled: navigator.cookieEnabled,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                screen: `${screen.width}x${screen.height}x${screen.colorDepth}`,
+                canvas: canvas.toDataURL(),
+                hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
+                memory: navigator.deviceMemory || 'unknown',
+                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown'
+            };
+            
+            // Create hash from fingerprint data
+            const fingerprintString = JSON.stringify(fingerprint);
+            let hash = 0;
+            for (let i = 0; i < fingerprintString.length; i++) {
+                const char = fingerprintString.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            
+            return 'user_' + Math.abs(hash).toString(36) + '_' + Date.now().toString(36);
+        }
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', async function() {
+            userFingerprint = await generateUserFingerprint();
+            console.log('User fingerprint:', userFingerprint);
+            loadData();
+            updateDashboard();
+            renderNotes();
+        });
+
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            currentPage = pageId;
+            
+            // Add animation
+            document.getElementById(pageId).classList.add('fade-in-up');
+        }
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('mobile-open');
+            } else {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            }
+        }
+
+        // Note Editor functions
+        function openNoteEditor(noteId = null) {
+            const editor = document.getElementById('noteEditor');
+            const titleInput = document.getElementById('noteTitle');
+            const contentInput = document.getElementById('noteContent');
+            
+            if (noteId) {
+                const note = notes.find(n => n.id === noteId);
+                if (note) {
+                    titleInput.value = note.title;
+                    contentInput.value = note.content;
+                    currentNoteId = noteId;
+                }
+            } else {
+                titleInput.value = '';
+                contentInput.value = '';
+                currentNoteId = null;
+                
+                // Load draft if available
+                setTimeout(loadDraft, 100);
+            }
+            
+            editor.classList.add('active');
+            titleInput.focus();
+        }
+
+        function closeNoteEditor() {
+            document.getElementById('noteEditor').classList.remove('active');
+            currentNoteId = null;
+        }
+
+        function saveNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            const selectedType = document.querySelector('.type-btn.active').dataset.type;
+            
+            if (!title || !content) {
+                alert('Veuillez remplir le titre et le contenu de la note.');
+                return;
+            }
+            
+            const note = {
+                id: currentNoteId || Date.now(),
+                title: title,
+                content: content,
+                type: selectedType,
+                createdAt: currentNoteId ? notes.find(n => n.id === currentNoteId).createdAt : new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                tags: extractTags(content)
+            };
+            
+            if (currentNoteId) {
+                const index = notes.findIndex(n => n.id === currentNoteId);
+                notes[index] = note;
+            } else {
+                notes.unshift(note);
+            }
+            
+            saveData();
+            renderNotes();
+            updateDashboard();
+            closeNoteEditor();
+            clearDraft(); // Clear the auto-saved draft
+            
+            // Show success message
+            showNotification('Note sauvegardée avec succès !');
+        }
+
+        function deleteNote(noteId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette note ?')) {
+                notes = notes.filter(n => n.id !== noteId);
+                saveData();
+                renderNotes();
+                updateDashboard();
+                showNotification('Note supprimée');
+            }
+        }
+
+        function extractTags(content) {
+            const tagRegex = /#(\w+)/g;
+            const tags = [];
+            let match;
+            
+            while ((match = tagRegex.exec(content)) !== null) {
+                if (!tags.includes(match[1])) {
+                    tags.push(match[1]);
+                }
+            }
+            
+            return tags;
+        }
+
+        // Note type selection
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('type-btn')) {
+                document.querySelectorAll('.type-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+            }
+        });
+
+        // Text formatting functions
+        function formatText(command) {
+            const textarea = document.getElementById('noteContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            
+            let formattedText = '';
+            switch(command) {
+                case 'bold':
+                    formattedText = `**${selectedText}**`;
+                    break;
+                case 'italic':
+                    formattedText = `*${selectedText}*`;
+                    break;
+                case 'underline':
+                    formattedText = `<u>${selectedText}</u>`;
+                    break;
+            }
+            
+            textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+            textarea.focus();
+        }
+
+        function insertList() {
+            const textarea = document.getElementById('noteContent');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+            
+            textarea.value = textBefore + '\n- ' + textAfter;
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = cursorPos + 3;
+        }
+
+        function insertLink() {
+            const url = prompt('URL du lien :');
+            const text = prompt('Texte du lien :');
+            
+            if (url && text) {
+                const textarea = document.getElementById('noteContent');
+                const cursorPos = textarea.selectionStart;
+                const textBefore = textarea.value.substring(0, cursorPos);
+                const textAfter = textarea.value.substring(cursorPos);
+                const link = `[${text}](${url})`;
+                
+                textarea.value = textBefore + link + textAfter;
+                textarea.focus();
+            }
+        }
+
+        // Render functions
+        function renderNotes() {
+            const notesGrid = document.getElementById('notesGrid');
+            
+            if (notes.length === 0) {
+                notesGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #9ca3af;">
+                        <h3>Aucune note pour le moment</h3>
+                        <p>Cliquez sur "Nouvelle Note" pour commencer</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            notesGrid.innerHTML = notes.map(note => {
+                const categoryClass = `category-${note.type}`;
+                const timeAgo = getTimeAgo(note.updatedAt);
+                
+                return `
+                    <div class="note-card ${categoryClass}" onclick="openNoteEditor(${note.id})">
+                        <div class="note-type">${note.type}</div>
+                        <h3>${note.title}</h3>
+                        <p>${note.content.substring(0, 150)}${note.content.length > 150 ? '...' : ''}</p>
+                        <div class="note-meta">
+                            <div class="note-tags">
+                                ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                            <span>${timeAgo}</span>
+                        </div>
+                        <button onclick="event.stopPropagation(); deleteNote(${note.id})" 
+                                style="position: absolute; top: 0.5rem; left: 0.5rem; background: none; border: none; cursor: pointer; opacity: 0.5; transition: opacity 0.2s;">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateDashboard() {
+            document.getElementById('notesCount').textContent = notes.length;
+            document.getElementById('projectsCount').textContent = projects.length;
+            document.getElementById('ideasCount').textContent = notes.filter(n => n.type === 'idea').length;
+            document.getElementById('tasksCount').textContent = notes.filter(n => n.type === 'task').length;
+        }
+
+        function getTimeAgo(dateString) {
+            const now = new Date();
+            const noteDate = new Date(dateString);
+            const diffTime = Math.abs(now - noteDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return 'Aujourd\'hui';
+            if (diffDays === 2) return 'Hier';
+            if (diffDays < 7) return `Il y a ${diffDays} jours`;
+            if (diffDays < 30) return `Il y a ${Math.ceil(diffDays / 7)} semaines`;
+            return `Il y a ${Math.ceil(diffDays / 30)} mois`;
+        }
+
+        // Quick add functionality
+        function showQuickAdd() {
+            const quickText = prompt('Note rapide :');
+            if (quickText && quickText.trim()) {
+                const note = {
+                    id: Date.now(),
+                    title: quickText.split(' ').slice(0, 5).join(' '),
+                    content: quickText,
+                    type: 'note',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    tags: extractTags(quickText)
+                };
+                
+                notes.unshift(note);
+                saveData();
+                renderNotes();
+                updateDashboard();
+                showNotification('Note rapide ajoutée !');
+            }
+        }
+
+        // Data persistence with user fingerprint
+        function saveData() {
+            try {
+                const data = {
+                    notes: notes,
+                    projects: projects,
+                    lastSave: new Date().toISOString(),
+                    userFingerprint: userFingerprint,
+                    version: '1.0'
+                };
+                
+                // Save to localStorage with user-specific key
+                const storageKey = `creativeNotes_${userFingerprint}`;
+                localStorage.setItem(storageKey, JSON.stringify(data));
+                
+                // Also save encrypted backup
+                const encryptedData = btoa(JSON.stringify(data));
+                localStorage.setItem(`${storageKey}_backup`, encryptedData);
+                
+                console.log('Data saved successfully for user:', userFingerprint);
+                
+                // Show save indicator
+                showSaveIndicator();
+                
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showNotification('Erreur lors de la sauvegarde', 'error');
+            }
+        }
+
+        function loadData() {
+            try {
+                const storageKey = `creativeNotes_${userFingerprint}`;
+                const savedData = localStorage.getItem(storageKey);
+                
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    
+                    // Verify data integrity
+                    if (data.userFingerprint === userFingerprint) {
+                        notes = data.notes || [];
+                        projects = data.projects || [];
+                        
+                        console.log('Data loaded successfully:', notes.length, 'notes');
+                        showNotification(`Données chargées: ${notes.length} notes`);
+                    } else {
+                        console.warn('User fingerprint mismatch, starting fresh');
+                        initializeSampleData();
+                    }
+                } else {
+                    // Try to load from backup
+                    const backupData = localStorage.getItem(`${storageKey}_backup`);
+                    if (backupData) {
+                        try {
+                            const decryptedData = JSON.parse(atob(backupData));
+                            if (decryptedData.userFingerprint === userFingerprint) {
+                                notes = decryptedData.notes || [];
+                                projects = decryptedData.projects || [];
+                                console.log('Data restored from backup');
+                                showNotification('Données restaurées depuis la sauvegarde');
+                                // Save restored data
+                                saveData();
+                                return;
+                            }
+                        } catch (e) {
+                            console.warn('Backup restoration failed');
+                        }
+                    }
+                    
+                    // No saved data found, initialize with sample data for new user
+                    console.log('No saved data found, initializing new user');
+                    initializeSampleData();
+                }
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showNotification('Erreur lors du chargement', 'error');
+                initializeSampleData();
+            }
+        }
+        
+        function initializeSampleData() {
+            notes = [
+                {
+                    id: Date.now() + 1,
+                    title: "Bienvenue dans CreativeSpace !",
+                    content: "Ceci est votre première note. Vos données sont sauvegardées automatiquement et de manière sécurisée sur cet appareil.\n\nFonctionnalités disponibles:\n- Sauvegarde automatique\n- Recherche instantanée\n- Organisation par tags\n- Export des données\n\n#bienvenue #tutorial",
+                    type: "note",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    tags: ["bienvenue", "tutorial"]
+                },
+                {
+                    id: Date.now() + 2,
+                    title: "Idée: Application mobile",
+                    content: "Développer une version mobile de l'application avec synchronisation cloud.\n\nCaractéristiques:\n- Interface tactile optimisée\n- Mode hors-ligne\n- Synchronisation automatique\n- Notifications push\n\n#idée #mobile #développement",
+                    type: "idea",
+                    createdAt: new Date(Date.now() - 86400000).toISOString(),
+                    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+                    tags: ["idée", "mobile", "développement"]
+                }
+            ];
+            
+            projects = [
+                {
+                    id: Date.now(),
+                    title: "Setup Initial",
+                    status: "completed",
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            
+            // Save initial data
+            saveData();
+        }
+
+        // Search functionality
+        document.querySelector('.search-bar input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                renderNotes();
+                return;
+            }
+            
+            const filteredNotes = notes.filter(note => 
+                note.title.toLowerCase().includes(searchTerm) ||
+                note.content.toLowerCase().includes(searchTerm) ||
+                note.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+            );
+            
+            renderFilteredNotes(filteredNotes);
+        });
+
+        function renderFilteredNotes(filteredNotes) {
+            const notesGrid = document.getElementById('notesGrid');
+            
+            if (filteredNotes.length === 0) {
+                notesGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #9ca3af;">
+                        <h3>Aucun résultat trouvé</h3>
+                        <p>Essayez avec d'autres mots-clés</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            notesGrid.innerHTML = filteredNotes.map(note => {
+                const categoryClass = `category-${note.type}`;
+                const timeAgo = getTimeAgo(note.updatedAt);
+                
+                return `
+                    <div class="note-card ${categoryClass}" onclick="openNoteEditor(${note.id})">
+                        <div class="note-type">${note.type}</div>
+                        <h3>${note.title}</h3>
+                        <p>${note.content.substring(0, 150)}${note.content.length > 150 ? '...' : ''}</p>
+                        <div class="note-meta">
+                            <div class="note-tags">
+                                ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            </div>
+                            <span>${timeAgo}</span>
+                        </div>
+                        <button onclick="event.stopPropagation(); deleteNote(${note.id})" 
+                                style="position: absolute; top: 0.5rem; left: 0.5rem; background: none; border: none; cursor: pointer; opacity: 0.5; transition: opacity 0.2s;">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Notifications
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            
+            const bgColor = type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'linear-gradient(135deg, #667eea, #764ba2)';
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                background: ${bgColor};
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Save indicator
+        function showSaveIndicator() {
+            const indicator = document.createElement('div');
+            indicator.innerHTML = '💾 Sauvegardé';
+            indicator.style.cssText = `
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: rgba(16, 185, 129, 0.9);
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 0.25rem;
+                font-size: 0.8rem;
+                z-index: 10000;
+                animation: fadeInOut 2s ease-out;
+            `;
+            
+            document.body.appendChild(indicator);
+            
+            setTimeout(() => {
+                if (document.body.contains(indicator)) {
+                    document.body.removeChild(indicator);
+                }
+            }, 2000);
+        }
+        
+        // Export/Import functionality
+        function exportData() {
+            try {
+                const exportData = {
+                    notes: notes,
+                    projects: projects,
+                    exportDate: new Date().toISOString(),
+                    userFingerprint: userFingerprint,
+                    version: '1.0'
+                };
+                
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `creative-notes-backup-${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                
+                URL.revokeObjectURL(url);
+                showNotification('Données exportées avec succès');
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                showNotification('Erreur lors de l\'export', 'error');
+            }
+        }
+        
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        if (importedData.notes && Array.isArray(importedData.notes)) {
+                            const confirmImport = confirm(`Importer ${importedData.notes.length} notes ? Cela remplacera vos données actuelles.`);
+                            
+                            if (confirmImport) {
+                                notes = importedData.notes;
+                                projects = importedData.projects || [];
+                                
+                                saveData();
+                                renderNotes();
+                                updateDashboard();
+                                showNotification(`${importedData.notes.length} notes importées`);
+                            }
+                        } else {
+                            showNotification('Format de fichier invalide', 'error');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Import error:', error);
+                        showNotification('Erreur lors de l\'import', 'error');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+        
+        // Clear all data (with confirmation)
+        function clearAllData() {
+            const confirmation = prompt('Tapez "SUPPRIMER" pour confirmer la suppression de toutes vos données:');
+            if (confirmation === 'SUPPRIMER') {
+                const storageKey = `creativeNotes_${userFingerprint}`;
+                localStorage.removeItem(storageKey);
+                localStorage.removeItem(`${storageKey}_backup`);
+                
+                notes = [];
+                projects = [];
+                
+                renderNotes();
+                updateDashboard();
+                showNotification('Toutes les données ont été supprimées');
+            }
+        }
+        
+        // Add export/import buttons to header
+        document.addEventListener('DOMContentLoaded', function() {
+            const actions = document.querySelector('.actions');
+            if (actions) {
+                const exportBtn = document.createElement('button');
+                exportBtn.className = 'btn btn-secondary';
+                exportBtn.innerHTML = '<span>📥</span> Export';
+                exportBtn.onclick = exportData;
+                
+                const importBtn = document.createElement('button');
+                importBtn.className = 'btn btn-secondary';
+                importBtn.innerHTML = '<span>📤</span> Import';
+                importBtn.onclick = importData;
+                
+                actions.insertBefore(exportBtn, actions.firstChild);
+                actions.insertBefore(importBtn, actions.firstChild);
+            }
+        });
+
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes fadeInOut {
+                0% { opacity: 0; transform: translateY(20px); }
+                20% { opacity: 1; transform: translateY(0); }
+                80% { opacity: 1; transform: translateY(0); }
+                100% { opacity: 0; transform: translateY(-20px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + N or Cmd + N for new note
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                openNoteEditor();
+            }
+            
+            // Ctrl + S or Cmd + S for save (when editor is open)
+            if ((e.ctrlKey || e.metaKey) && e.key === 's' && document.getElementById('noteEditor').classList.contains('active')) {
+                e.preventDefault();
+                saveNote();
+            }
+            
+            // Escape to close editor
+            if (e.key === 'Escape' && document.getElementById('noteEditor').classList.contains('active')) {
+                closeNoteEditor();
+            }
+            
+            // Ctrl + K or Cmd + K for quick add
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                showQuickAdd();
+            }
+        });
+
+        // Auto-save functionality with user-specific data
+        let autoSaveTimeout;
+        document.addEventListener('DOMContentLoaded', function() {
+            const noteContent = document.getElementById('noteContent');
+            if (noteContent) {
+                noteContent.addEventListener('input', function() {
+                    clearTimeout(autoSaveTimeout);
+                    autoSaveTimeout = setTimeout(() => {
+                        // Auto-save draft to user-specific storage
+                        const draftKey = `draft_${userFingerprint}`;
+                        const draftData = {
+                            title: document.getElementById('noteTitle').value,
+                            content: this.value,
+                            timestamp: new Date().toISOString()
+                        };
+                        localStorage.setItem(draftKey, JSON.stringify(draftData));
+                        console.log('Draft auto-saved...');
+                    }, 2000);
+                });
+            }
+        });
+        
+        // Load draft when opening editor
+        function loadDraft() {
+            const draftKey = `draft_${userFingerprint}`;
+            const savedDraft = localStorage.getItem(draftKey);
+            if (savedDraft) {
+                try {
+                    const draftData = JSON.parse(savedDraft);
+                    const draftAge = new Date() - new Date(draftData.timestamp);
+                    
+                    // Only load draft if it's less than 1 hour old
+                    if (draftAge < 3600000) {
+                        const useDraft = confirm('Un brouillon non sauvegardé a été trouvé. Voulez-vous le récupérer ?');
+                        if (useDraft) {
+                            document.getElementById('noteTitle').value = draftData.title;
+                            document.getElementById('noteContent').value = draftData.content;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Error loading draft:', e);
+                }
+            }
+        }
+        
+        // Clear draft when note is saved
+        function clearDraft() {
+            const draftKey = `draft_${userFingerprint}`;
+            localStorage.removeItem(draftKey);
+        }
+
+        // Handle mobile responsiveness
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('mobile-open');
+            }
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.querySelector('.toggle-sidebar');
+                
+                if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                    sidebar.classList.remove('mobile-open');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
